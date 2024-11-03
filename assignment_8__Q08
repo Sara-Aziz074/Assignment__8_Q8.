@@ -1,1 +1,58 @@
 https://colab.research.google.com/drive/1jMW8ixnhcA5teiah-pOUo4BJQXIoymCG#scrollTo=YTHKFVkHql46
+
+#Water Bucket Puzzle
+#Problem Statement:
+#In this puzzle game, you must use three buckets (three-liter, five-liter, and eight-liter
+#  buckets) to collect exactly four liters of water in one of the buckets. Buckets can 
+# only be emptied, completely filled, or poured into another bucket. For example, you can
+#  fill the five-liter bucket and then pour its contents into the three-liter bucket, 
+# leaving you with a full three-liter bucket and two liters of water in the five-liter 
+# bucket.
+
+
+
+class BucketPuzzle:
+ def __init__(self):
+        # Initialize buckets with capacities
+        self.buckets = {
+            '3L': 0,
+            '5L': 0,
+            '8L': 0
+        }
+
+ def fill_bucket(self, bucket):
+        """Fill the specified bucket."""
+        if bucket == '5L':
+            self.buckets['5L'] = 5
+        elif bucket == '3L':
+            self.buckets['3L'] = 3
+        elif bucket == '8L':
+            self.buckets['8L'] = 8
+        print(f"Filled {bucket}: {self.buckets}")
+
+ def empty_bucket(self, bucket):
+        """Empty the specified bucket."""
+        self.buckets[bucket] = 0
+        print(f"Emptied {bucket}: {self.buckets}")
+
+ def pour(self, source, target):
+        """Pour water from source bucket to target bucket."""
+        amount_to_pour = min(self.buckets[source], (3 if target == '3L' else 5 if target == '5L' else 8) - self.buckets[target])
+        self.buckets[source] -= amount_to_pour
+        self.buckets[target] += amount_to_pour
+        print(f"Poured from {source} to {target}: {self.buckets}")
+
+ def solve(self):
+        """Solve the puzzle to get exactly 4 liters in one of the buckets."""
+        self.fill_bucket('5L')   # Fill 5L bucket
+        self.pour('5L', '3L')     # Pour 5L to 3L
+        self.empty_bucket('3L')   # Empty 3L bucket
+        self.pour('5L', '3L')     # Pour remaining from 5L to 3L
+        self.fill_bucket('5L')    # Fill 5L bucket again
+        self.pour('5L', '3L')     # Pour from 5L to 3L until 3L is full
+
+        print(f"Final state: {self.buckets}")
+
+# Create a puzzle instance and solve it
+puzzle = BucketPuzzle()
+puzzle.solve()
